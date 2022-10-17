@@ -1,6 +1,7 @@
 import { useContext, useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import { GlobalStoreContext } from '../store'
+
 /*
     This is a card in our list of playlists. It lets select
     a list for editing and it has controls for changing its 
@@ -11,6 +12,8 @@ import { GlobalStoreContext } from '../store'
 function ListCard(props) {
     const { store } = useContext(GlobalStoreContext);
     const [ editActive, setEditActive ] = useState(false);
+    const [ deleteActive, setDeleteActive ] = useState(false);
+
     const [ text, setText ] = useState("");
     store.history = useHistory();
     const { idNamePair, selected } = props;
@@ -18,12 +21,30 @@ function ListCard(props) {
     function handleLoadList(event) {
         if (!event.target.disabled) {
             let _id = event.target.id;
+            console.log(_id);
             if (_id.indexOf('list-card-text-') >= 0)
                 _id = ("" + _id).substring("list-card-text-".length);
 
             // CHANGE THE CURRENT LIST
             store.setCurrentList(_id);
         }
+    }
+
+   
+
+    function handleToggleDelete(event) {
+        event.stopPropagation();
+        let _id = event.target.id;
+            if (_id.indexOf('delete-list-') >= 0)
+                _id = ("" + _id).substring("delete-list-".length);
+        toggleDelete(_id);
+    }
+
+    function toggleDelete(id) {
+        let modal = document.getElementById("delete-list-modal");
+        modal.classList.add("is-visible");
+
+        store.deleteList(id);
     }
 
     function handleToggleEdit(event) {
@@ -34,7 +55,7 @@ function ListCard(props) {
     function toggleEdit() {
         let newActive = !editActive;
         if (newActive) {
-            store.setIsListNameEditActive();
+            store.setlistNameActive();
         }
         setEditActive(newActive);
     }
@@ -58,6 +79,8 @@ function ListCard(props) {
     if (store.isListNameEditActive) {
         cardStatus = true;
     }
+
+
     let cardElement =
         <div
             id={idNamePair._id}
@@ -76,6 +99,7 @@ function ListCard(props) {
                 id={"delete-list-" + idNamePair._id}
                 className="list-card-button"
                 value={"\u2715"}
+                onClick={handleToggleDelete}
             />
             <input
                 disabled={cardStatus}
@@ -86,7 +110,7 @@ function ListCard(props) {
                 value={"\u270E"}
             />
         </div>;
-
+        
     if (editActive) {
         cardElement =
             <input
@@ -98,6 +122,7 @@ function ListCard(props) {
                 defaultValue={idNamePair.name}
             />;
     }
+
     return (
         cardElement
     );

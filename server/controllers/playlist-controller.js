@@ -6,21 +6,57 @@ const Playlist = require('../models/playlist-model')
     
     @author McKilla Gorilla
 */
+updatePlaylistById = (req, res) => {
+    let body = req.body;
+    if (!body) {
+        return res.status(400).json({
+            success: false,
+            error: 'You must provide a Playlist',
+        })
+    } else {
+        console.log("UPDATENAME: VALID BODY");
+    }
+
+    const playlist = new Playlist(body);
+    if (playlist.name == '') {
+        playlist.name = 'Untitled';
+    }
+    Playlist.findOneAndUpdate({ _id: req.params.id }, {name: playlist.name}, (err, list) => {
+        if (err) {
+            return res.status(400).json({ success: false, error: err })
+        }
+        return res.status(200).json({ success: true, playlist: list })
+    }).catch(err => console.log(err))
+}
+
+
+deletePlaylist = (req, res) => {
+    Playlist.deleteOne({ _id: req.params.id }, (err, list) => {
+        if (err) {
+            return res.status(400).json({ success: false, error: err })
+        }
+        return res.status(200).json({ success: true, playlist: list })
+    }).catch(err => console.log(err))
+
+
+}
 createPlaylist = (req, res) => {
     const body = req.body;
-    console.log("createPlaylist body: " + body);
 
     if (!body) {
         return res.status(400).json({
             success: false,
             error: 'You must provide a Playlist',
         })
+    } else {
+        console.log("CREATELIST: VALID BODY");
     }
-
     const playlist = new Playlist(body);
-    console.log("playlist: " + JSON.stringify(body));
+  //  console.log("playlist: " + JSON.stringify(body));
     if (!playlist) {
         return res.status(400).json({ success: false, error: err })
+    } else {
+        console.log("CREATELIST: VALID PLAYLIST");
     }
 
     playlist
@@ -30,6 +66,7 @@ createPlaylist = (req, res) => {
                 success: true,
                 playlist: playlist,
                 message: 'Playlist Created!',
+                id: playlist.id
             })
         })
         .catch(error => {
@@ -88,8 +125,10 @@ getPlaylistPairs = async (req, res) => {
 }
 
 module.exports = {
+    deletePlaylist,
     createPlaylist,
     getPlaylists,
     getPlaylistPairs,
-    getPlaylistById
+    getPlaylistById,
+    updatePlaylistById,
 }

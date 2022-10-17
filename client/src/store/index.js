@@ -1,6 +1,6 @@
 import { createContext, useState } from 'react'
 import jsTPS from '../common/jsTPS'
-import api from '../api'
+import api, { getAllPlaylists } from '../api'
 export const GlobalStoreContext = createContext({});
 /*
     This is our global data store. Note that it uses the Flux design pattern,
@@ -116,7 +116,8 @@ export const useGlobalStore = () => {
         async function asyncChangeListName(id) {
             let response = await api.getPlaylistById(id);
             if (response.data.success) {
-                let playlist = response.data.playist;
+                console.log(id);
+                let playlist = response.data.playlist;
                 playlist.name = newName;
                 async function updateList(playlist) {
                     response = await api.updatePlaylistById(playlist._id, playlist);
@@ -141,6 +142,56 @@ export const useGlobalStore = () => {
             }
         }
         asyncChangeListName(id);
+    }
+
+    //THIS FUNCTION PROCESSES CREATING A LIST
+    store.createNewList = function () {
+        async function asyncCreateNewList() {
+           var playlist = {
+                name: 'Untitled',
+                songs: []
+            }
+            let response = await api.createNewList(playlist);
+            if (response.data.success) {
+                async function getListPairs(playlist) {
+                    let old_id = response.data.id;
+                    response = await api.getPlaylistPairs();
+                    if (response.data.success) {
+                        let pairsArray = response.data.idNamePairs;
+                        storeReducer({
+                            type: GlobalStoreActionType.CREATE_NEW_LIST,
+                            payload: {
+                                idNamePairs: pairsArray,
+                                currentList: playlist
+                            }
+                        });
+                        store.setCurrentList(old_id);
+                    }
+                }          
+                getListPairs(playlist);
+            }
+        }
+
+       asyncCreateNewList();
+    }
+
+    //THIS FUNCTION PROCESSES DELETING A LIST
+    store.deleteList = function (id) {
+        async function asyncDeleteList(id) {
+            let response = await api.deleteList(id);
+            async function getListPairs() {
+                response = await api.getPlaylistPairs();
+                if (response.data.success) {
+                    let pairsArray = response.data.idNamePairs;
+                    storeReducer({
+                        type: GlobalStoreActionType.LOAD_ID_NAME_PAIRS,
+                        payload: pairsArray
+                    });
+                }
+            }   
+            getListPairs();
+        }   
+        asyncDeleteList(id);
     }
 
     // THIS FUNCTION PROCESSES CLOSING THE CURRENTLY LOADED LIST

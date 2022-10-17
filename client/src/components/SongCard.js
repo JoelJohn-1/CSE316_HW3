@@ -1,7 +1,9 @@
+// eslint-disable-next-line
 import React, { useContext, useState } from 'react'
 import { GlobalStoreContext } from '../store'
 
 function SongCard(props) {
+// eslint-disable-next-line
     const { store } = useContext(GlobalStoreContext);
 
     const { song, index } = props;
