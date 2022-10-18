@@ -33,7 +33,7 @@ const ListSelector = () => {
     return (
         <div id="playlist-selector">
             <div id="list-selector-list">
-            <div id="playlist-selector-heading">
+            <div id="playlist-selector-heading" >
                 <input
                     type="button"
                     id="add-list-button"

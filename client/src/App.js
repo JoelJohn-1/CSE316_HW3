@@ -2,6 +2,7 @@ import './App.css';
 import { React } from 'react'
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import { Banner, ListSelector, PlaylistCards, Statusbar, DeleteListModal, DeleteSongModal, EditSongModal } from './components'
+import "@fontsource/tangerine";
 
 /*
     This is our application's top-level component.

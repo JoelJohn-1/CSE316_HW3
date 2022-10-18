@@ -23,7 +23,8 @@ function EditSongModal() {
        <div 
        class="modal" 
        id="edit-song-modal" 
-       data-animation="slideInOutLeft">
+       data-animation="slideInOutLeft"
+        >
            <div class="modal-root" id='verify-edit-song-root'>
                <div class="modal-north">
                    Edit Song

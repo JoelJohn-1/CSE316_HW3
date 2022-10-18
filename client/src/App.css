@@ -22,12 +22,16 @@ body {
 
 #root {
   background-color: var(--swatch-primary);
-  font-family: "Lexend Exa";
+  font-family: "Tangerine";
   position: absolute;
   width: 80%;
   left: 10%;
   height:90%;
   top: 5%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  font-size: 55px;
 }
 
 #app-root {
@@ -48,7 +52,7 @@ body {
   background-image: linear-gradient(to bottom,         
   #b8b808, #636723);
   color: white;
-  font-size: 48pt;
+  font-size: 54pt;
   border-color: black;
   border-width: 2px;
   border-style: solid;
@@ -60,20 +64,29 @@ body {
   grid-row: 1 / 2;
   background-color: transparent;
   float:right;
+  display: flex;
+  flex-direction: row;
+  overflow: auto;
+  background-color: var(--swatch-primary);
 }
 
 #playlist-selector, #playlist-cards {
-  overflow: scroll;
-  grid-column: 1 / 3;
-  grid-row: 2 / 3;
-  display:grid;
-  background-color: var(--swatch-primary);
+  overflow-y: scroll;
+  overflow-x: hidden;
+  background-color: var(--swatch-accent);
+  flex-grow: 1;
+
+}
+
+.playlist-selector-heading {
+  border: black;
+  font-size: 34;
 }
 
 .playlister-button, .playlister-button-disabled {
   font-size:36pt;
   border-width: 0px;
-  float:left;
+  float:center;
   color: black;
   cursor: pointer;
   opacity: 100%;
@@ -90,7 +103,6 @@ body {
 }
 
 #playlister-statusbar {
-  position: absolute;
   left: 0%;
   top: 90%;
   width: 100%;
@@ -99,15 +111,17 @@ body {
   display:flex;
   align-items: center;
   justify-content: center;
-  font-size: 36pt;
+  font-size: 45pt;
+  position: initial;
 }
 
 #add-list-button {
-  float:left;
+  float:right;
+  
 }
 
 .list-card, .selected-list-card, .unselected-list-card {
-  font-size: 18pt;
+  font-size: 32pt;
   margin: 10px;
   padding: 20px;
   border-radius: 25px;
