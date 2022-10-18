@@ -1,6 +1,23 @@
 import React, { Component } from 'react';
+import { GlobalStoreContext } from '../store'
+import { useContext, useState } from 'react'
 
 function DeleteListModal() {
+
+    const { store } = useContext(GlobalStoreContext);
+
+    function handleConfirmDelete() {
+        console.log("IDASID");
+        let modal = document.getElementById("delete-list-modal");
+        modal.classList.remove("is-visible");
+        store.deleteList();
+    }
+
+    function handleCancelDelete() {
+        let modal = document.getElementById("delete-list-modal");
+        modal.classList.remove("is-visible");
+    }
+    
        let deleteListModal = 
             <div 
                 class="modal" 
@@ -19,11 +36,15 @@ function DeleteListModal() {
                             <input type="button" 
                                 id="delete-list-confirm-button" 
                                 class="modal-button" 
-                                value='Confirm' />
+                                value='Confirm' 
+                                onClick={handleConfirmDelete}
+                                />
                             <input type="button" 
                                 id="delete-list-cancel-button" 
                                 class="modal-button" 
-                                value='Cancel' />
+                                value='Cancel'
+                                onClick={handleCancelDelete}
+                                />
                         </div>
                     </div>
             </div>

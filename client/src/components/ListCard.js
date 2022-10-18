@@ -43,8 +43,8 @@ function ListCard(props) {
     function toggleDelete(id) {
         let modal = document.getElementById("delete-list-modal");
         modal.classList.add("is-visible");
-
-        store.deleteList(id);
+        store.markListForDeletion(id);
+        // store.deleteList(id);
     }
 
     function handleToggleEdit(event) {

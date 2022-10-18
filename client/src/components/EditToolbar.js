@@ -23,6 +23,10 @@ function EditToolbar() {
         history.push("/");
         store.closeCurrentList();
     }
+    function handleAdd() {
+        store.addSong();
+    }
+    
     let editStatus = false;
     if (store.isListNameEditActive) {
         editStatus = true;
@@ -35,6 +39,7 @@ function EditToolbar() {
                 disabled={editStatus}
                 value="+"
                 className={enabledButtonClass}
+                onClick={handleAdd}
             />
             <input
                 type="button"

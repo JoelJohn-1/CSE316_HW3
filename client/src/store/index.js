@@ -31,7 +31,8 @@ export const useGlobalStore = () => {
         idNamePairs: [],
         currentList: null,
         newListCounter: 0,
-        listNameActive: false
+        listNameActive: false,
+        listIdToDelete: null,
     });
 
     // HERE'S THE DATA STORE'S REDUCER, IT MUST
@@ -116,13 +117,12 @@ export const useGlobalStore = () => {
         async function asyncChangeListName(id) {
             let response = await api.getPlaylistById(id);
             if (response.data.success) {
-                console.log(id);
                 let playlist = response.data.playlist;
                 playlist.name = newName;
-                async function updateList(playlist) {
+                async function asyncUpdateList(playlist) {
                     response = await api.updatePlaylistById(playlist._id, playlist);
                     if (response.data.success) {
-                        async function getListPairs(playlist) {
+                        async function asyncGetListPairs(playlist) {
                             response = await api.getPlaylistPairs();
                             if (response.data.success) {
                                 let pairsArray = response.data.idNamePairs;
@@ -135,10 +135,10 @@ export const useGlobalStore = () => {
                                 });
                             }
                         }
-                        getListPairs(playlist);
+                        asyncGetListPairs(playlist);
                     }
                 }
-                updateList(playlist);
+                asyncUpdateList(playlist);
             }
         }
         asyncChangeListName(id);
@@ -174,9 +174,11 @@ export const useGlobalStore = () => {
 
        asyncCreateNewList();
     }
-
+    store.markListForDeletion = function (id) {
+        store.listIdToDelete = id;
+    }
     //THIS FUNCTION PROCESSES DELETING A LIST
-    store.deleteList = function (id) {
+    store.deleteList = function () {
         async function asyncDeleteList(id) {
             let response = await api.deleteList(id);
             async function getListPairs() {
@@ -191,9 +193,27 @@ export const useGlobalStore = () => {
             }   
             getListPairs();
         }   
-        asyncDeleteList(id);
+        asyncDeleteList(store.listIdToDelete);
     }
 
+    store.addSong = function() {
+        let newSongList = store.currentList.songs;
+        let defaultSong = {
+            "title": "Untitled",
+            "artist": "Unknown",
+            "youTubeId": "dQw4w9WgXcQ"
+        }
+        newSongList.push(defaultSong);
+        async function asyncUpdateList(playlist) {
+            let response = await api.updatePlaylistById(playlist._id, playlist);
+            let newList = response.data.playlist;
+            console.log("============");
+            console.log(store.currentList);
+            store.setCurrentList(store.currentList._id);
+        }
+        asyncUpdateList(store.currentList);
+      
+    }
     // THIS FUNCTION PROCESSES CLOSING THE CURRENTLY LOADED LIST
     store.closeCurrentList = function () {
         storeReducer({
