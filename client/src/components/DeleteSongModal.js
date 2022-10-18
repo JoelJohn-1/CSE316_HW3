@@ -3,6 +3,7 @@ import { GlobalStoreContext } from '../store'
 import { useContext, useState } from 'react'
 
 function DeleteSongModal() {
+
     const { store } = useContext(GlobalStoreContext);
 
     function handleConfirmDelete() {
@@ -16,7 +17,7 @@ function DeleteSongModal() {
         modal.classList.remove("is-visible");
     }
     
-       let DeleteSongModal = 
+       let deleteSongModal = 
             <div 
                 class="modal" 
                 id="delete-song-modal" 
@@ -47,7 +48,7 @@ function DeleteSongModal() {
                     </div>
             </div>
     return (
-        DeleteSongModal
+        deleteSongModal
     );
 }
 

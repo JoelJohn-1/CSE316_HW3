@@ -12,16 +12,15 @@ function SongCard(props) {
     function handleToggleDelete(event) {
         event.stopPropagation();
         let _id = event.target.id;
-            if (_id.indexOf('delete-song-') >= 0)
-                _id = ("" + _id).substring("delete-song-".length);
+            if (_id.indexOf('remove-song-') >= 0)
+                _id = ("" + _id).substring("remove-song-".length);
         toggleDelete(_id);
     }
 
     function toggleDelete(id) {
         let modal = document.getElementById("delete-song-modal");
         modal.classList.add("is-visible");
-        // store.markListForDeletion(id);
-        console.log(id);
+        store.markSongForDeletion(id);
     }
 
     return (

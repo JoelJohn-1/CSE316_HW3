@@ -33,6 +33,7 @@ export const useGlobalStore = () => {
         newListCounter: 0,
         listNameActive: false,
         listIdToDelete: null,
+        songIndexToDelete: null,
     });
 
     // HERE'S THE DATA STORE'S REDUCER, IT MUST
@@ -177,6 +178,11 @@ export const useGlobalStore = () => {
     store.markListForDeletion = function (id) {
         store.listIdToDelete = id;
     }
+
+    store.markSongForDeletion = function (id) {
+        store.songIndexToDelete = id;
+    }
+
     //THIS FUNCTION PROCESSES DELETING A LIST
     store.deleteList = function () {
         async function asyncDeleteList(id) {
@@ -196,6 +202,17 @@ export const useGlobalStore = () => {
         asyncDeleteList(store.listIdToDelete);
     }
 
+    store.deleteSong = function () {
+        let newSongList = store.currentList.songs;
+        newSongList.splice(this.songIndexToDelete, 1);
+        async function asyncUpdateList(playlist) {
+            let response = await api.updatePlaylistById(playlist._id, playlist);
+            if (response.data.success)
+                store.setCurrentList(store.currentList._id);
+        }
+        asyncUpdateList(store.currentList);
+    }
+
     store.addSong = function() {
         let newSongList = store.currentList.songs;
         let defaultSong = {
@@ -206,10 +223,8 @@ export const useGlobalStore = () => {
         newSongList.push(defaultSong);
         async function asyncUpdateList(playlist) {
             let response = await api.updatePlaylistById(playlist._id, playlist);
-            let newList = response.data.playlist;
-            console.log("============");
-            console.log(store.currentList);
-            store.setCurrentList(store.currentList._id);
+            if (response.data.success)
+                store.setCurrentList(store.currentList._id);
         }
         asyncUpdateList(store.currentList);
       
