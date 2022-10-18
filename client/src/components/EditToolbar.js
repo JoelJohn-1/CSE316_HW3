@@ -24,7 +24,7 @@ function EditToolbar() {
         store.closeCurrentList();
     }
     function handleAdd() {
-        store.addSong();
+        store.addAddSongTransaction();
     }
     
     let editStatus = false;

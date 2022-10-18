@@ -12,27 +12,13 @@ function EditSongModal() {
         let title = document.getElementById("edit-song-title-input").value;
         let artist = document.getElementById("edit-song-artist-input").value;
         let ytID = document.getElementById("edit-song-youTubeId-input").value;
-        store.editSong(title, artist, ytID);
+        store.addEditSongTransaction(title, artist, ytID);
     }
 
     function handleCancelEdit() {
         let modal = document.getElementById("edit-song-modal");
         modal.classList.remove("is-visible");
     }
-    
-
-    // function handleTitleChange(event) {
-
-    // }
-
-    // function handleArtistChange(event) {
-    //     console.log(store.oldArtist)
-    // }
-
-    // function handleYTIDChange(event) {
-    // }
-
-
        let editSongModal = 
        <div 
        class="modal" 

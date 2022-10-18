@@ -1,7 +1,17 @@
 import { createContext, useState } from 'react'
 import jsTPS from '../common/jsTPS'
+import AddSong_Transaction from '../components/AddSong_Transaction.js'
+import MoveSong_Transaction from '../components/MoveSong_Transaction.js'
+import DeleteSong_Transaction from '../components/DeleteSong_Transaction.js'
+import EditSong_Transaction from '../components/EditSong_Transaction.js'
 import api, { getAllPlaylists } from '../api'
 export const GlobalStoreContext = createContext({});
+
+// OUR TRANSACTIONS
+// import MoveSong_Transaction from './transactions/MoveSong_Transaction.js';
+// import EditSong_Transaction from './transactions/EditSong_Transaction.js';
+// import DeleteSong_Transaction from './transactions/DeleteSong_Transaction';
+
 /*
     This is our global data store. Note that it uses the Flux design pattern,
     which makes use of things like actions and reducers. 
@@ -22,7 +32,6 @@ export const GlobalStoreActionType = {
 
 // WE'LL NEED THIS TO PROCESS TRANSACTIONS
 const tps = new jsTPS();
-
 // WITH THIS WE'RE MAKING OUR GLOBAL DATA STORE
 // AVAILABLE TO THE REST OF THE APPLICATION
 export const useGlobalStore = () => {
@@ -206,6 +215,12 @@ export const useGlobalStore = () => {
         asyncUpdateList(store.currentList);
     }
 
+    store.addEditSongTransaction = function(title, artist, ytID) {
+        let songs = store.currentList.songs;
+        let editTransaction = new EditSong_Transaction(store, store.songIndexToEdit, songs[store.songIndexToEdit].artist, songs[store.songIndexToEdit].title, songs[store.songIndexToEdit].youTubeId,
+            artist, title, ytID);
+            tps.addTransaction(editTransaction);
+    }
     //THIS FUNCTION PROCESSES DELETING A LIST
     store.deleteList = function () {
         async function asyncDeleteList(id) {
@@ -235,7 +250,27 @@ export const useGlobalStore = () => {
         }
         asyncUpdateList(store.currentList);
     }
+
+    store.addSwapSongsTransaction = function(sourceId, targetId) {
+        let moveTransaction = new MoveSong_Transaction(store, sourceId, targetId);
+        tps.addTransaction(moveTransaction);
+    }
+
+    store.addMoveAfterDelete = (index, oldSong) => {
+        let newList = store.currentList;
+        newList.songs.splice(index, 0, oldSong);
+        async function asyncUpdateList(playlist) {
+            let response = await api.updatePlaylistById(playlist._id, playlist);
+            if (response.data.success)
+                store.setCurrentList(store.currentList._id);
+        }
+        asyncUpdateList(store.currentList);
+    }
+
     store.deleteSong = function () {
+        if (store.songIndexToDelete == -1) {
+            store.songIndexToDelete = store.currentList.songs.length - 1;
+        }
         let newSongList = store.currentList.songs;
         newSongList.splice(this.songIndexToDelete, 1);
         async function asyncUpdateList(playlist) {
@@ -246,6 +281,11 @@ export const useGlobalStore = () => {
         asyncUpdateList(store.currentList);
     }
 
+    store.addDeleteSongTransaction = function () {
+        let deleteTransaction = new DeleteSong_Transaction(store, store.songIndexToDelete, store.currentList.songs[store.songIndexToDelete]);
+        tps.addTransaction(deleteTransaction);
+    }
+    
     store.addSong = function() {
         let newSongList = store.currentList.songs;
         let defaultSong = {
@@ -261,6 +301,11 @@ export const useGlobalStore = () => {
         }
         asyncUpdateList(store.currentList);
       
+    }
+
+    store.addAddSongTransaction = function () {
+        let addtransaction = new AddSong_Transaction(store);
+        tps.addTransaction(addtransaction);
     }
     // THIS FUNCTION PROCESSES CLOSING THE CURRENTLY LOADED LIST
     store.closeCurrentList = function () {
@@ -322,6 +367,7 @@ export const useGlobalStore = () => {
             payload: null
         });
     }
+
 
     // THIS GIVES OUR STORE AND ITS REDUCER TO ANY COMPONENT THAT NEEDS IT
     return { store, storeReducer };

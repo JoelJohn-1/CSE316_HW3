@@ -78,7 +78,7 @@ function SongCard(props) {
         console.log(targetId);
 
         if (sourceId != targetId) {
-            store.swapSongs(sourceId, targetId);
+            store.addSwapSongsTransaction(sourceId, targetId);
         }
     }
     return (

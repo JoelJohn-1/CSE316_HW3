@@ -9,7 +9,7 @@ function DeleteSongModal() {
     function handleConfirmDelete() {
         let modal = document.getElementById("delete-song-modal");
         modal.classList.remove("is-visible");
-        store.deleteSong();
+        store.addDeleteSongTransaction();
     }
 
     function handleCancelDelete() {

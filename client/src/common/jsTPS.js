@@ -1,13 +1,4 @@
-/**
- * jsTPS_Transaction
- * 
- * This provides the basic structure for a transaction class. Note to use
- * jsTPS one should create objects that define these two methods, doTransaction
- * and undoTransaction, which will update the application state accordingly.
- * 
- * @author THE McKilla Gorilla (accept no imposters)
- * @version 1.0
- */
+
 export class jsTPS_Transaction {
     /**
      * This method is called by jTPS when a transaction is executed.
