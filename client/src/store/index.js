@@ -34,6 +34,7 @@ export const useGlobalStore = () => {
         listNameActive: false,
         listIdToDelete: null,
         songIndexToDelete: null,
+        songIndexToEdit: null,
     });
 
     // HERE'S THE DATA STORE'S REDUCER, IT MUST
@@ -183,6 +184,28 @@ export const useGlobalStore = () => {
         store.songIndexToDelete = id;
     }
 
+    store.markSongForEditing = function (id) {
+        store.songIndexToEdit = id;
+        // store.oldTitle = store.currentList.songs[id].title;
+    
+        // store.oldArtist = store.currentList.songs[id].artist;
+        // store.oldYTID = store.currentList.songs[id].youTubeId;
+        
+    }
+
+    store.editSong = function (title, artist, ytID) {
+        let playlist = store.currentList;
+        playlist.songs[store.songIndexToEdit].title = title;
+        playlist.songs[store.songIndexToEdit].artist = artist;
+        playlist.songs[store.songIndexToEdit].youTubeId = ytID;
+        async function asyncUpdateList(playlist) {
+            let response = await api.updatePlaylistById(playlist._id, playlist);
+            if (response.data.success)
+                store.setCurrentList(store.currentList._id);
+        }
+        asyncUpdateList(store.currentList);
+    }
+
     //THIS FUNCTION PROCESSES DELETING A LIST
     store.deleteList = function () {
         async function asyncDeleteList(id) {
@@ -202,6 +225,16 @@ export const useGlobalStore = () => {
         asyncDeleteList(store.listIdToDelete);
     }
 
+    store.swapSongs = function(sourceId, targetId) {
+        let newSongList = store.currentList.songs;
+        [newSongList[sourceId], newSongList[targetId]] = [newSongList[targetId], newSongList[sourceId]];
+        async function asyncUpdateList(playlist) {
+            let response = await api.updatePlaylistById(playlist._id, playlist);
+            if (response.data.success)
+                store.setCurrentList(store.currentList._id);
+        }
+        asyncUpdateList(store.currentList);
+    }
     store.deleteSong = function () {
         let newSongList = store.currentList.songs;
         newSongList.splice(this.songIndexToDelete, 1);

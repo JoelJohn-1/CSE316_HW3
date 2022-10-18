@@ -14,7 +14,7 @@ updatePlaylistById = (req, res) => {
             error: 'You must provide a Playlist',
         })
     } else {
-        console.log("UPDATENAME: VALID BODY");
+        // console.log("UPDATENAME: VALID BODY");
     }
 
     const playlist = new Playlist(body);
@@ -49,14 +49,14 @@ createPlaylist = (req, res) => {
             error: 'You must provide a Playlist',
         })
     } else {
-        console.log("CREATELIST: VALID BODY");
+        // console.log("CREATELIST: VALID BODY");
     }
     const playlist = new Playlist(body);
   //  console.log("playlist: " + JSON.stringify(body));
     if (!playlist) {
         return res.status(400).json({ success: false, error: err })
     } else {
-        console.log("CREATELIST: VALID PLAYLIST");
+        // console.log("CREATELIST: VALID PLAYLIST");
     }
 
     playlist
