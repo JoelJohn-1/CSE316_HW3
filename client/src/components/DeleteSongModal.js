@@ -2,44 +2,43 @@ import React, { Component } from 'react';
 import { GlobalStoreContext } from '../store'
 import { useContext, useState } from 'react'
 
-function DeleteListModal() {
-
+function DeleteSongModal() {
     const { store } = useContext(GlobalStoreContext);
 
     function handleConfirmDelete() {
-        let modal = document.getElementById("delete-list-modal");
+        let modal = document.getElementById("delete-song-modal");
         modal.classList.remove("is-visible");
-        store.deleteList();
+        store.deleteSong();
     }
 
     function handleCancelDelete() {
-        let modal = document.getElementById("delete-list-modal");
+        let modal = document.getElementById("delete-song-modal");
         modal.classList.remove("is-visible");
     }
     
-       let deleteListModal = 
+       let DeleteSongModal = 
             <div 
                 class="modal" 
-                id="delete-list-modal" 
+                id="delete-song-modal" 
                 data-animation="slideInOutLeft">
-                    <div class="modal-root" id='verify-delete-list-root'>
+                    <div class="modal-root" id='verify-delete-song-root'>
                         <div class="modal-north">
-                            Delete playlist?
+                            Delete song?
                         </div>
                         <div class="modal-center">
                             <div class="modal-center-content">
-                                Are you sure you wish to permanently delete the playlist?
+                                Are you sure you wish to permanently delete the song?
                             </div>
                         </div>
                         <div class="modal-south">
                             <input type="button" 
-                                id="delete-list-confirm-button" 
+                                id="delete-song-confirm-button" 
                                 class="modal-button" 
                                 value='Confirm' 
                                 onClick={handleConfirmDelete}
                                 />
                             <input type="button" 
-                                id="delete-list-cancel-button" 
+                                id="delete-song-cancel-button" 
                                 class="modal-button" 
                                 value='Cancel'
                                 onClick={handleCancelDelete}
@@ -48,8 +47,8 @@ function DeleteListModal() {
                     </div>
             </div>
     return (
-        deleteListModal
+        DeleteSongModal
     );
 }
 
-export default DeleteListModal;
+export default DeleteSongModal;

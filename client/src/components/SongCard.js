@@ -8,6 +8,22 @@ function SongCard(props) {
 
     const { song, index } = props;
     let cardClass = "list-card unselected-list-card";
+    
+    function handleToggleDelete(event) {
+        event.stopPropagation();
+        let _id = event.target.id;
+            if (_id.indexOf('delete-song-') >= 0)
+                _id = ("" + _id).substring("delete-song-".length);
+        toggleDelete(_id);
+    }
+
+    function toggleDelete(id) {
+        let modal = document.getElementById("delete-song-modal");
+        modal.classList.add("is-visible");
+        // store.markListForDeletion(id);
+        console.log(id);
+    }
+
     return (
         <div
             key={index}
@@ -26,6 +42,7 @@ function SongCard(props) {
                 id={"remove-song-" + index}
                 className="list-card-button"
                 value={"\u2715"}
+                onClick={handleToggleDelete}
             />
         </div>
     );
