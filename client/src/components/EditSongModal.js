@@ -13,7 +13,7 @@ function EditSongModal() {
         let artist = document.getElementById("edit-song-artist-input").value;
         let ytID = document.getElementById("edit-song-youTubeId-input").value;
         store.addEditSongTransaction(title, artist, ytID);
-    }
+            }
 
     function handleCancelEdit() {
         let modal = document.getElementById("edit-song-modal");

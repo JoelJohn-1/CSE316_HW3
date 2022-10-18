@@ -35,6 +35,9 @@ function SongCard(props) {
         toggleEdit(_id);
     }
     function toggleEdit(id) {
+        document.getElementById("edit-song-title-input").value = store.currentList.songs[id].title;
+        document.getElementById("edit-song-artist-input").value = store.currentList.songs[id].artist;
+        document.getElementById("edit-song-youTubeId-input").value = store.currentList.songs[id].youTubeId;
         let modal = document.getElementById("edit-song-modal");
         modal.classList.add("is-visible");
         
