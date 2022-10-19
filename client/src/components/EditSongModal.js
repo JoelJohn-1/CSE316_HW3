@@ -1,5 +1,6 @@
-import React, { Component, StrictMode } from 'react';
+import React from 'react';
 import { GlobalStoreContext } from '../store'
+// eslint-disable-next-line
 import { useContext, useState } from 'react'
 
 function EditSongModal() {

@@ -1,5 +1,7 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { GlobalStoreContext } from '../store'
+
+// eslint-disable-next-line
 import { useContext, useState } from 'react'
 
 function DeleteListModal() {

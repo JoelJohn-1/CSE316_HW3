@@ -7,8 +7,9 @@ function SongCard(props) {
     const { store } = useContext(GlobalStoreContext);
 
     const { song, index } = props;
-
+// eslint-disable-next-line
     const [ isDragging, setDragging ] = useState(false);
+    // eslint-disable-next-line
     const [ draggedTo, setDraggedTo ] = useState(false);
 
     let cardClass = "list-card unselected-list-card";
@@ -80,7 +81,7 @@ function SongCard(props) {
         console.log(sourceId);
         console.log(targetId);
 
-        if (sourceId != targetId) {
+        if (sourceId !== targetId) {
             store.addSwapSongsTransaction(sourceId, targetId);
         }
     }

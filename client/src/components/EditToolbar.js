@@ -12,7 +12,7 @@ function EditToolbar() {
     const history = useHistory();
 
     let enabledButtonClass = "playlister-button";
-
+    
     function handleUndo() {
         store.undo();
     }
@@ -21,22 +21,27 @@ function EditToolbar() {
     }
     function handleClose() {
         history.push("/");
-        store.closeCurrentList();
+        if (store.currentList)
+            store.closeCurrentList();
     }
     function handleAdd() {
-        store.addAddSongTransaction();
+        console.log(store.listNameActive);
+        if (store.currentList)
+            store.addAddSongTransaction();
     }
     
     let editStatus = false;
     if (store.isListNameEditActive) {
         editStatus = true;
     }
+
+    
     return (
         <span id="edit-toolbar">
             <input
                 type="button"
                 id='add-song-button'
-                disabled={editStatus}
+                disabled={(store.currentList == null)}
                 value="+"
                 className={enabledButtonClass}
                 onClick={handleAdd}
@@ -44,7 +49,7 @@ function EditToolbar() {
             <input
                 type="button"
                 id='undo-button'
-                disabled={editStatus}
+                disabled={!store.undoPossible()}
                 value="⟲"
                 className={enabledButtonClass}
                 onClick={handleUndo}
@@ -52,7 +57,7 @@ function EditToolbar() {
             <input
                 type="button"
                 id='redo-button'
-                disabled={editStatus}
+                disabled={!store.redoPossible()}
                 value="⟳"
                 className={enabledButtonClass}
                 onClick={handleRedo}
@@ -60,7 +65,7 @@ function EditToolbar() {
             <input
                 type="button"
                 id='close-button'
-                disabled={editStatus}
+                disabled={(store.currentList == null)}
                 value="&#x2715;"
                 className={enabledButtonClass}
                 onClick={handleClose}
